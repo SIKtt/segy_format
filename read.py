@@ -2,6 +2,7 @@ import binascii
 import struct
 import ebcdic
 import os
+import numpy as np
 from matplotlib import pyplot as plt
 
 f0URL = "E:\marmousi\stack.segy"
@@ -44,8 +45,9 @@ def r3decode(r3):
 
 def hex2dec(r):
     for i in range(int(len(r)/2)):
-        print(r[2*i:2*(i+1)].hex())
+       k.append(int(r[2*i:2*(i+1)].hex(), 16))
     return k
+
 head_keys = {
     'JobID'                 : 3201,
     'LineNumber'            : 3205,
@@ -184,10 +186,9 @@ fstream = open(f2URL, 'rb')
 r1 = fstream.read(3200)
 # 400 bytes bin
 r2 = fstream.read(400)
-r3 = fstream.read(240)
-r4 = fstream.read(240)
-
-
+# trace head
+# r3 = fstream.read(240)
+# r4 = fstream.read(240)
 
 # print(r1.decode("cp1148"))
 # print(r1)
@@ -200,26 +201,43 @@ r4 = fstream.read(240)
 
 head_val = head_keys
 r2decode(r2, head_val)
-
+print("Traces")
 print(head_val['Traces'])
+print("Samples")
 print(head_val['Samples'])
 trace = head_val['Traces']
 sampr = head_val['Samples']
 
-all = trace * sampr
-# print(single)
-r5 = fstream.read(sampr)
-k = []
-k = hex2dec(r5)
+# r5 = fstream.read(sampr)
+z = []
 
-
-trace_val = trace_keys
-# for i in range(trace):
-    # subbegin = i * sampr
-    # subend = (i + 1) * sampr
-    # plot(r5[subbegin, subend])
+# k = hex2dec(r5)
 # plt.figure()
-# plt.plot(r5)
+# plt.plot(k)
 # plt.show()
+
+# trace_val = trace_keys
+for i in range(trace):
+    r3 = fstream.read(240)
+    r4 = fstream.read(sampr*2)
+    k = []
+    k = hex2dec(r4)
+    z.append(k)
+# r3 = fstream.read(240)
+# r4 = fstream.read(sampr*2)
+# k = hex2dec(r4)
+# z.append(k)
+
+
+# for i in range(10):
+    # k = np.linspace(0,1,10)
+    # z.append(k)
+print(len(z))
+print(len(z[0]))
+# print(z)
+# print(np.linspace(0,1,10))
+
+
+
 # print(r4)
 
