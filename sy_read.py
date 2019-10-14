@@ -31,6 +31,14 @@ def r_trace(fstream, trace, sampr):
 			k.append(seg[0])      
 		z.append(k)
 	return z
+
+def r_shot(fstream, trace, sampr):
+	r_m = fstream.tell()
+	r = fstream.read()
+	fstream.seek(r_m)
+	single_dsize = trace * sampr * 4 + trace * 240
+	shot_num = int(len(r)/single_dsize)
+	return shot_num
 	
 def close_test(fstream):
     rf1=fstream.read()
