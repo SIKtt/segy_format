@@ -19,7 +19,18 @@ def rdecode(r, dic):
 		dataID = key
 		dataBegin = dic[key] - 3200 - 1
 	return vdic
-
+def ibm2ieee(ibm):
+    """
+    Converts an IBM floating point number into IEEE format.
+    :param: ibm - 32 bit unsigned integer: unpack('>L', f.read(4))
+    """
+    if ibm == 0:
+        return 0.0
+    sign = ibm >> 31 & 0x01
+    exponent = ibm >> 24 & 0x7f
+    mantissa = (ibm & 0x00ffffff) / float(pow(2, 24))
+    return (1 - 2 * sign) * mantissa * pow(16, exponent - 64)
+	
 def r_trace(fstream, trace, sampr):
 	z = []
 	for i in range(trace):
